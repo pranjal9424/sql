@@ -15,6 +15,7 @@ MySQL evaluates the FROM clause first and then the SELECT clause:
  select * from orders;
  select * from products;
  select * FROM productlines;
+
  
  select firstName,jobTitle from employees;
  
@@ -24,6 +25,7 @@ MySQL evaluates the FROM clause first and then the SELECT clause:
  he ORDER BY clause is always evaluated after the FROM and SELECT clause.
  By default, the ORDER BY clause uses ASC
  */
+
  
  select customerNumber 
  from customers
@@ -33,6 +35,7 @@ MySQL evaluates the FROM clause first and then the SELECT clause:
  select customerNumber
  from customers
  order by customerNumber asc;
+
  
  select customerNumber,customerName,contactFirstName,city
  from customers
@@ -41,6 +44,7 @@ MySQL evaluates the FROM clause first and then the SELECT clause:
  select orderNumber, orderlinenumber,quantityOrdered * priceEach As subtotal
  from orderdetails
  order by subtotal Desc;
+
  
  select orderNumber,status
  from orders
@@ -66,4 +70,57 @@ expr [NOT] BETWEEN begin_expr AND end_expr;
  
  The IN  operator allows you to determine if a specified value matches any value in a set of values or returned by a subquery.
  */
- 
+
+
+ select *
+from employees
+where officeCode <> '1';
+
+
+ select *
+from employees
+where reportsTo is null;
+
+
+ select *
+from employees
+where officeCode  between 1 and 3;
+
+
+ select *
+from employees
+where jobTitle = 'Sales Rep' Or officeCode = '1'
+order by officeCode,jobTitle;
+
+
+select * from orders
+where requireddate between cast('2003-01-01' as date) and cast('2003-01-31' as date);
+
+select * from employees
+WHERE lastName NOT LIKE 'B%';
+
+select productCode from products
+where productCode like '%\_20%';   #escape character
+
+select * from employees
+where lastname like '%son' and officeCode in(1,2,3,4);
+select * from orders where orderNumber
+in(
+select orderNumber
+from orderDetails
+group by orderNumber
+having sum(quantityOrdered * priceEach) > 60000
+);
+
+select lastname from employees order by lastname;
+select distinct lastname from employees order by lastname;
+
+select count(distinct state)
+from customers
+where country = 'USA';
+
+select distinct state , city
+from customers
+where state is not null
+order by state ,city;
+
