@@ -543,12 +543,3 @@ PREPARE stmt1 FROM
         
         	
 DEALLOCATE PREPARE stmt1;
-
-
-
- 
-
-
-
-
- 
