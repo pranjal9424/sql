@@ -112,6 +112,97 @@ Select REPLACE(FIRST_NAME,'a','A') from Worker;
 
 select concat(FIRST_NAME,' ',LAST_NAME) AS 'COMPLETE_NAME' FROM Worker;
 #---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-11. Write an SQL query to print all Worker details from the Worker table order by FIRST_NAME Ascending.
 
+select * from Worker order by FIRST_NAME asc;
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-12. Write an SQL query to print all Worker details from the Worker table order by FIRST_NAME Ascending and DEPARTMENT Descending.
 
+select * from Worker order by FIRST_NAME asc,DEPARTMENT desc;
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-13. Write an SQL query to print details for Workers with the first name as “Vipul” and “Satish” from Worker table.
 
+select * FROM Worker where FIRST_NAME in ('Vipul','Satish');
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-14. Write an SQL query to print details of workers excluding first names, “Vipul” and “Satish” from Worker table
+
+select * from Worker where FIRST_NAME not in ('Vipul','Satish');
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-15. Write an SQL query to print details of Workers with DEPARTMENT name as “Admin”.
+
+select * from Worker where DEPARTMENT like 'Admin';
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-16. Write an SQL query to print details of the Workers whose FIRST_NAME contains ‘a’.
+
+select * from Worker where FIRST_NAME like '%a%';
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-17. Write an SQL query to print details of the Workers whose FIRST_NAME ends with ‘a’
+
+select * from Worker where FIRST_NAME like '%a';
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-18. Write an SQL query to print details of the Workers whose FIRST_NAME ends with ‘h’ and contains six alphabets.
+
+select * from Worker where FIRST_NAME like '______h';
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-19. Write an SQL query to print details of the Workers whose SALARY lies between 100000 and 500000.
+
+select * FROM Worker where SALARY between 100000 and 500000;
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-20. Write an SQL query to print details of the Workers who have joined in Feb’2014.
+
+select * from Worker where year(JOINING_DATE) = 2014 AND month(JOINING_DATE)=2;
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Write an SQL query to fetch the count of employees working in the department ‘Admin’.
+
+select count(*) FROM Worker where DEPARTMENT = 'Admin';
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-22. Write an SQL query to fetch worker names with salaries >= 50000 and <= 100000.
+
+SELECT CONCAT(FIRST_NAME, ' ', LAST_NAME) As Worker_Name, Salary
+FROM worker 
+WHERE WORKER_ID IN 
+(SELECT WORKER_ID FROM worker WHERE Salary BETWEEN 50000 AND 100000);
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-23. Write an SQL query to fetch the no. of workers for each department in the descending order.
+
+select DEPARTMENT , count(worker_ID) TOTAL_Workers
+from worker
+group by DEPARTMENT
+order by TOTAL_Workers;
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-24. Write an SQL query to print details of the Workers who are also Managers.
+
+select distinct w.FIRST_NAME , t.WORKER_TITLE
+from Worker w
+inner join Title t
+on w.WORKER_ID = T.WORKER_REF_ID
+AND T.WORKER_TITLE IN ('Manager');
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-25. Write an SQL query to fetch duplicate records having matching data in some fields of a table.
+
+select WORKER_TITLE,AFFECTED_FROM, count(*)
+FROM TITLE
+GROUP BY WORKER_TITLE,AFFECTED_FROM
+having count(*)>1;
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-26. Write an SQL query to show only odd rows from a table.
+
+select * from Worker where mod(WORKER_ID,2)<>0;
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-27. Write an SQL query to show only even rows from a table.
+
+select * from Worker where mod(WORKER_ID,2)=0;
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-28. Write an SQL query to clone a new table from another table.
+
+create table WorkerClone like Worker;
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-29. Write an SQL query to fetch intersecting records of two tables.
+
+(SELECT * FROM Worker)
+INTERSECT
+(SELECT * FROM WorkerClone);
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-30. Write an SQL query to show records from one table that another table does not have.
+
+SELECT * FROM Worker MINUS SELECT * FROM Title;
