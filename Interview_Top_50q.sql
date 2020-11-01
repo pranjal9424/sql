@@ -206,3 +206,87 @@ INTERSECT
 #Q-30. Write an SQL query to show records from one table that another table does not have.
 
 SELECT * FROM Worker MINUS SELECT * FROM Title;
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-31. Write an SQL query to show the current date and time.
+
+SELECT CURDATE();
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-32. Write an SQL query to show the top n (say 10) records of a table.
+
+select * from Worker order by Salary desc limit 5;
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+# Write an SQL query to determine the nth (say n=5) highest salary from a table.
+
+select distinct Salary from Worker order by Salary desc limit 5;
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-34. Write an SQL query to determine the 5th highest salary without using TOP or limit method.
+
+select distinct Salary from Worker W1 where 1 = (
+    select count(distinct (w2.Salary))
+    from Worker w2
+    where w2.Salary >= w1.Salary
+    );
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-35. Write an SQL query to fetch the list of employees with the same salary.
+
+select distinct W.WORKER_ID,W.FIRST_NAME,W.Salary
+from Worker W ,Worker w1
+where W.Salary=w1.Salary and W.WORKER_ID != w1.WORKER_ID;
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-36. Write an SQL query to show the second highest salary from a table.
+
+SELECT FIRST_NAME, max(Salary) from Worker where Salary not in (select max(Salary) from Worker);
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-37. Write an SQL query to show one row twice in results from a table.
+
+select FIRST_NAME, DEPARTMENT from worker W where W.DEPARTMENT='HR' 
+union all 
+select FIRST_NAME, DEPARTMENT from Worker W1 where W1.DEPARTMENT='HR';
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-38. Write an SQL query to fetch intersecting records of two tables.
+(SELECT * FROM Worker)
+INTERSECT
+(SELECT * FROM WorkerClone);
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-39. Write an SQL query to fetch the first 50% records from a table.
+
+select * from Worker where WORKER_ID <= (SELECT count(WORKER_ID)/2 FROM Worker);
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-40. Write an SQL query to fetch the departments that have less than five people in it.
+
+SELECT DEPARTMENT, COUNT(WORKER_ID) as 'Number of Workers' FROM Worker GROUP BY DEPARTMENT HAVING COUNT(WORKER_ID) < 5;
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-42. Write an SQL query to show the last record from a table.
+
+SELECT * FROM Worker Where WORKER_ID = (select MAX(WORKER_ID) FROM Worker); 
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-43. Write an SQL query to fetch the first row of a table.
+
+select * from Worker where WORKER_ID=(SELECT MIN(WORKER_ID) FROM Worker);
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-44. Write an SQL query to fetch the last five records from a table.
+SELECT * FROM Worker WHERE WORKER_ID <=5
+UNION
+SELECT * FROM (SELECT * FROM Worker W order by W.WORKER_ID DESC) AS W1 WHERE W1.WORKER_ID <=5;
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-45. Write an SQL query to print the name of employees having the highest salary in each department.
+
+SELECT t.DEPARTMENT,t.FIRST_NAME,t.Salary from(SELECT max(Salary) as TotalSalary,DEPARTMENT from Worker group by DEPARTMENT) as TempNew 
+Inner Join Worker t on TempNew.DEPARTMENT=t.DEPARTMENT 
+ and TempNew.TotalSalary=t.Salary;
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-46. Write an SQL query to fetch three max salaries from a table.
+
+select distinct Salary from worker a where 3 >= (select count(distinct Salary) from worker b where a.Salary <= b.Salary) order by a.Salary desc;
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-47. Write an SQL query to fetch three min salaries from a table.
+
+select distinct Salary from worker a where 3 >= (select count(distinct Salary) from worker b where a.Salary >= b.Salary) order by a.Salary asc;
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-49. Write an SQL query to fetch departments along with the total salaries paid for each of them.
+
+select DEPARTMENT , SUM(Salary) from Worker group by DEPARTMENT;
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-50. Write an SQL query to fetch the names of workers who earn the highest salary.
+
+SELECT FIRST_NAME,max(Salary) FROM Worker where Salary not in (select max(Salary) from Worker);
