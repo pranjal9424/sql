@@ -290,3 +290,7 @@ select DEPARTMENT , SUM(Salary) from Worker group by DEPARTMENT;
 #Q-50. Write an SQL query to fetch the names of workers who earn the highest salary.
 
 SELECT FIRST_NAME,max(Salary) FROM Worker where Salary not in (select max(Salary) from Worker);
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+#Q-50. Write an SQL query to fetch the name of workers who get 3 highest salary pakage
+
+select distinct Salary from Worker a where 3=( select count(distinct Salary) from Worker b where b.Salary>=a.Salary) order by a.Salary desc;
